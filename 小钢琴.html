@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    ul li{
+        list-style: none;
+        float: left;
+        width:100px;
+        height:50px;
+        background:gold;
+        margin: 5px;
+        text-align: center;
+        line-height: 50px;
+    }
+</style>
+<body>
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+    </ul>
+    <div class="audio">
+        <audio src="mp3/1.mp3"></audio>
+        <audio src="mp3/2.mp3"></audio>
+        <audio src="mp3/3.mp3"></audio>
+        <audio src="mp3/4.mp3"></audio>
+        <audio src="mp3/5.mp3"></audio>
+        <audio src="mp3/6.mp3"></audio>
+        <audio src="mp3/7.mp3"></audio>
+    </div>
+    <button id="btn">播放录制的音乐</button>
+</body>
+<script src="jquery-3.2.1.js"></script>
+<script>
+    $("#btn").click(function(){//点击按钮
+       var str=localStorage.getItem("qp");//读取本地存储
+       var arr=JSON.parse(str);//将字符串转数组
+       console.log(str);
+       var i=0;
+       var t=setInterval(function () {
+          if(i>=arr.length){
+              clearInterval(t);//清除定时器
+              return;
+          }
+          var a=$("audio").get(arr[i]);//arr[i] 是保存的下标
+           a.load();
+          a.play();
+          i++;
+       },500)
+    });
+
+    var arr=[];//很多键，用数组来保存
+    $(document).keydown(function(e){//键盘按下事件
+        var i=e.keyCode-49;//得到对应的下表
+        arr.push(i);//保存按键添加到数组中
+        var s=JSON.stringify(arr);//数组转字符串
+        localStorage.setItem("qp",s);//本地存储
+        var a=$("audio").get(i);//转成js对象
+        a.load();//重新加载
+        a.play();//播放
+    })
+</script>
+</html>
